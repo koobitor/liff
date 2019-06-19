@@ -1,0 +1,59 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>LIFF</title>
+  <script src="https://d.line-scdn.net/liff/1.0/sdk.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+  <H1>Hi <span id="name"></span></H1>
+  <a href="https://4577ad20.ngrok.io/login.html">Login</a>
+  <script>
+    liff.init(
+      data => {
+        // Now you can call LIFF API
+
+        // User ID
+        const userId = data.context.userId;
+        console.log('user', userId)
+
+        // Access Token
+        const accessToken = liff.getAccessToken();
+        console.log('access token', accessToken)
+
+        // Get Profile
+        liff.getProfile()
+          .then(profile => {
+            console.log('profile',profile)
+            const name = profile.displayName
+            console.log('name',name)
+
+            document.getElementById('name').innerHTML = name
+
+            liff.sendMessages([
+              {
+                type:'text',
+                text:'Order Number : 000020139'
+              }
+            ])
+            .then(() => {
+              console.log('message sent');
+            })
+            .catch((err) => {
+              console.log('error', err);
+            });
+          })
+          .catch((err) => {
+            console.log('error', err);
+          });
+      },
+      err => {
+        // LIFF initialization failed
+        console.log('error',err)
+      }
+    );
+  </script>
+</body>
+</html>
